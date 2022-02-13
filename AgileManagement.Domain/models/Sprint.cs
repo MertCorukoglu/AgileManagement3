@@ -12,10 +12,10 @@ namespace AgileManagement.Domain.models
         public string SprintName { get;private set; }
         public DateTime StartDate { get;private set; }
         public DateTime FinishDate { get;private set; }
-        public string SprintNo { get;private set; }
+        public int SprintNo { get;private set; }
 
         public string ProjectId { get;private set; }
-        public Sprint(DateTime startDate, DateTime finishDate, string projectId, string sprintNo)
+        public Sprint(DateTime startDate, DateTime finishDate, string projectId, int sprintNo)
         {
             Id = Guid.NewGuid().ToString();
             AddSprintTime(startDate, finishDate);
@@ -31,25 +31,21 @@ namespace AgileManagement.Domain.models
         public void AddSprintTime (DateTime startDate, DateTime finishDate)
         {
             
-            if (finishDate < startDate)
+            if (finishDate.Minute < startDate.Minute)
             {
                 throw new Exception("Bitiş tarihi başlangıç tarihinden önce olamaz.");
             }
-            if (DateTime.Now > startDate)
-            {
-                throw new Exception("Geçmiş tarih girilemez.");
-            }
+            //if (DateTime.Now > startDate)
+            //{
+            //    throw new Exception("Geçmiş tarih girilemez.");
+            //}
 
             this.StartDate = startDate;
             this.FinishDate = finishDate;
         }
 
-        public void AddSprintNo (string sprintNo)
+        public void AddSprintNo (int sprintNo)
         {
-            if (string.IsNullOrEmpty(sprintNo))
-            {
-                throw new Exception("Sprint numarası atanamadı.");
-            }
             this.SprintNo = sprintNo;
         }
   

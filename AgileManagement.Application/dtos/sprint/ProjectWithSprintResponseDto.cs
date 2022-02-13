@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AgileManagement.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace AgileManagement.Application.dtos.sprint
         public DateTime StartDate { get; set; }
 
         public DateTime FinishDate { get; set; }
-        public string SprintNo { get; set; }
+        public int SprintNo { get; set; }
         public string SprintName { get; set; }
 
     }
@@ -35,6 +36,7 @@ namespace AgileManagement.Application.dtos.sprint
     }
     public class ProjectWithSprintResponseDto
     {
-        public ProjectSprintDto Projects = new ProjectSprintDto();
+        public List<ProjectSprintDto> Project = new List<ProjectSprintDto>();
+
     }
 }

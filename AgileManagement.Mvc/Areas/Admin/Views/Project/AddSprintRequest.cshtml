@@ -9,13 +9,13 @@
 
 <div class="container">
     <div class="row border">
-        <div class="border col-md-3">@Model.Projects.Name</div>
+        <div class="border col-md-3">@Model.Project[0].Name</div>
 
         <div class="border col-md-9">
             <button class="btn btn-primary" onclick="AddSprintWindow()">Add Sprint to Project</button>
             <a asp-area="Admin" asp-controller="Project" asp-action="AddContributorRequest">Remove Sprint to Project</a>
             <div class="accordion" id="accordionExample">
-                @foreach (var sprint in Model.Projects.Sprints)
+                @foreach (var sprint in Model.Project[0].Sprints)
                 {
 
                     <div class="accordion-item">
@@ -40,7 +40,7 @@
                     <p class="text-center">Sprint Details</p>
                     <input type="date" class="form-control" id="startdate" >
                     <input type="date" class="form-control" id="finishdate">
-                    <button onclick="AddSprint('1')">Kaydet</button>
+                    <button onclick="AddSprint('@Model.Project[0].ProjectId')">Kaydet</button>
                 </div>
                 <div class="col-md-3">
 

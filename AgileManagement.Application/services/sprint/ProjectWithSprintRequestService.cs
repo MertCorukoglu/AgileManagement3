@@ -34,11 +34,12 @@ namespace AgileManagement.Application.services.sprint
 
             }).ToList();
 
+
             var response = new ProjectWithSprintResponseDto
             {
-                Projects = project[0]
+                Project = project
             };
-
+            
             return response;
         }
     }
