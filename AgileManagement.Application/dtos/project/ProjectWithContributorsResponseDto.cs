@@ -33,6 +33,7 @@ namespace AgileManagement.Application
         /// Projeye eklenen contributorler
         /// </summary>
         public List<ContributorDto> Contributors { get; set; } = new List<ContributorDto>();
+
     }
 
     public class ProjectWithContributorsResponseDto

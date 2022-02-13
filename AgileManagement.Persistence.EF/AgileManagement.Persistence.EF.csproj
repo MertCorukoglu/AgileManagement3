@@ -20,4 +20,8 @@
     <ProjectReference Include="..\AgileManagement.Domain\AgileManagement.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="migrations\appuser\" />
+  </ItemGroup>
+
 </Project>

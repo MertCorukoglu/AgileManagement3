@@ -4,29 +4,35 @@
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Management</h1>
 
+<script src="https://your-site-or-cdn.com/fontawesome/v5.15.4/js/all.js" data-auto-a11y="true"></script>
 
 @model List<AgileManagement.Application.ProjectDto>
 
-<h1>Projects</h1>
-
-<table class="table table-striped">
-    <tr>
-        <th>Project Name</th>
-        <th>Description</th>
-        <th>Contributors</th>
-        <th>Operations</th>
-    </tr>
+<h1>Projects Managements</h1>
 
 
+
+
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
     @foreach (var item in Model)
     {
-        <tr>
-            <td>@item.Name</td>
-            <td>@item.Description</td>
-            <td>@string.Join(',', item.Contributors.Select(a => a.Email))</td>
-            <td><a asp-area="Admin" asp-controller="Project" asp-action="AddContributorRequest" asp-route-projectId="@item.ProjectId">Add Contributor to Project</a></td>
-        </tr>
+
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="text-center card-title">@item.Name</h5>
+                    <p class="card-text">@item.Description</p>
+                    @for (int i = 0; i < item.Contributors.Count(); i++)
+                    {
+                        <p>@item.Contributors[i].Email</p>
+                    }
+                    <a asp-area="Admin" asp-controller="Project" asp-action="AddContributorRequest" asp-route-projectId="@item.ProjectId">Add Contributor to Project</a>
+                    <a asp-area="Admin" asp-controller="Project" asp-action="AddSprintRequest" asp-route-projectId="@item.ProjectId">Details</a>
+                </div>
+            </div>
+        </div>
+
     }
-</table>
+</div>

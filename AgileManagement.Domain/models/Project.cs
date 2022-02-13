@@ -1,4 +1,5 @@
 ﻿using AgileManagement.Core;
+using AgileManagement.Domain.models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace AgileManagement.Domain
         private List<Contributor> contributors = new List<Contributor>();
         public IReadOnlyList<Contributor> Contributers => contributors;
 
+        private List<Sprint> sprints = new List<Sprint>();
+        public IReadOnlyList<Sprint> Sprints => sprints;
         public string CreatedBy { get; private set; }
 
 
@@ -75,6 +78,11 @@ namespace AgileManagement.Domain
         {
             contributors.Remove(contributor);
             DomainEvent.Raise(new ContributorRevokeAccessEvent(this.Name,contributor.UserId));
+        }
+
+        public void AddSprint(Sprint sprint)
+        {
+            sprints.Add(sprint);
         }
 
     }

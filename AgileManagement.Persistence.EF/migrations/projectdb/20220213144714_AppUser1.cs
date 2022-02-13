@@ -2,13 +2,13 @@
 
 namespace AgileManagement.Persistence.EF.migrations.projectdb
 {
-    public partial class ProjectCreatedBy : Migration
+    public partial class AppUser1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "CreatedBy",
-                table: "Projects",
+                name: "SprintName",
+                table: "Sprint",
                 type: "nvarchar(max)",
                 nullable: true);
         }
@@ -16,8 +16,8 @@ namespace AgileManagement.Persistence.EF.migrations.projectdb
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "CreatedBy",
-                table: "Projects");
+                name: "SprintName",
+                table: "Sprint");
         }
     }
 }

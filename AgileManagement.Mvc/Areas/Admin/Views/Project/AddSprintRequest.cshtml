@@ -1,0 +1,93 @@
+﻿
+@{
+    ViewData["Title"] = "AddSprintRequest";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model AgileManagement.Application.dtos.sprint.ProjectWithSprintResponseDto
+<h1>AddSprintRequest</h1>
+
+<div class="container">
+    <div class="row border">
+        <div class="border col-md-3">@Model.Projects.Name</div>
+
+        <div class="border col-md-9">
+            <button class="btn btn-primary" onclick="AddSprintWindow()">Add Sprint to Project</button>
+            <a asp-area="Admin" asp-controller="Project" asp-action="AddContributorRequest">Remove Sprint to Project</a>
+            <div class="accordion" id="accordionExample">
+                @foreach (var sprint in Model.Projects.Sprints)
+                {
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="@sprint.SprintNo">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                @sprint.SprintName
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <p>@sprint.StartDate-@sprint.FinishDate</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div style="display: none" id="sprintadded" class="row">
+                <div class="col-md-3">
+
+                </div>
+                <div class="col-md-6">
+                    <p class="text-center">Sprint Details</p>
+                    <input type="date" class="form-control" id="startdate" >
+                    <input type="date" class="form-control" id="finishdate">
+                    <button onclick="AddSprint('1')">Kaydet</button>
+                </div>
+                <div class="col-md-3">
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{ 
+
+    <script>
+
+        function AddSprintWindow(){
+
+            $('#sprintadded').toggle();
+            
+        }
+
+        function AddSprint(projectId) {
+            console.log(projectId);
+            const startDate = $('#startdate').val();
+            const finishDate = $('#finishdate').val();
+
+            let sprint = {
+                startDate,
+                finishDate,
+                projectId
+            };
+            $.ajax({
+                method: 'Post',
+                url: '/Admin/Project/AddSprintRequest',
+                contentType: 'application/json',
+                data: JSON.stringify(sprint), // data body den gönder demek
+                success: (response) => {
+                    alert('Başarılı')
+                },
+                error: (error) => {
+                    console.log('error', error);
+                }
+            })
+            
+        }
+
+
+
+    </script>
+
+}

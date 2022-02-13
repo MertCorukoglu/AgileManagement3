@@ -1,5 +1,8 @@
 ﻿using AgileManagement.Application;
+using AgileManagement.Application.dtos.sprint;
+using AgileManagement.Application.services.sprint;
 using AgileManagement.Domain;
+using AgileManagement.Domain.models;
 using AgileManagement.Mvc.Areas.Admin.Models;
 using AgileManagement.Mvc.Controllers;
 using AgileManagement.Mvc.Services;
@@ -22,14 +25,18 @@ namespace AgileManagement.Mvc.Areas.Admin.Controllers
         private readonly IProjectWithContributorsRequestService _projectWithContributorsRequestService;
         private readonly IMapper _mapper;
         private readonly IContributorProjectAccessApprovementService _contributorProjectAccessApprovementService;
+        private readonly IProjectWithSprintRequestService _projectWithSprintRequestService;
+        private readonly IProjectAddSprintService _projectAddSprintService;
 
-        public ProjectController(IProjectRepository projectRepository, IUserRepository userRepository, IProjectWithContributorsRequestService projectWithContributorsRequestService, IMapper mapper, AuthenticatedUser authenticatedUser, IContributorProjectAccessApprovementService contributorProjectAccessApprovementService) : base(authenticatedUser)
+        public ProjectController(IProjectRepository projectRepository, IProjectAddSprintService projectAddSprintService, IUserRepository userRepository, IProjectWithContributorsRequestService projectWithContributorsRequestService, IMapper mapper, AuthenticatedUser authenticatedUser, IProjectWithSprintRequestService projectWithSprintRequestService, IContributorProjectAccessApprovementService contributorProjectAccessApprovementService) : base(authenticatedUser)
         {
             _projectRepository = projectRepository;
             _userRepository = userRepository;
             _projectWithContributorsRequestService = projectWithContributorsRequestService;
             _mapper = mapper;
             _contributorProjectAccessApprovementService = contributorProjectAccessApprovementService;
+            _projectWithSprintRequestService = projectWithSprintRequestService;
+            _projectAddSprintService = projectAddSprintService;
         }
 
         public IActionResult Index()
@@ -81,6 +88,11 @@ namespace AgileManagement.Mvc.Areas.Admin.Controllers
             return View();
         }
 
+        public IActionResult ProjectDetails(string projectId)
+        {
+
+            return View();
+        }
 
         [HttpGet]
         public IActionResult AddContributorRequest(string projectId)
@@ -119,5 +131,34 @@ namespace AgileManagement.Mvc.Areas.Admin.Controllers
             return Json("OK");
 
         }
+        public IActionResult AddSprintRequest(string projectId)
+        {
+            var response = _projectWithSprintRequestService.OnProcess(new ProjectWithSprintRequestDto { ProjectId = projectId });
+            return View(response);
+        }
+        [HttpPost]
+        public JsonResult AddSprintRequest ([FromBody] SprintInputModel model)
+        {
+            var project = _projectRepository.Find(model.ProjectId);
+
+            var dto = new ProjectAddSprintRequestDto
+            {
+                ProjectId = model.ProjectId,
+                StartDate = model.StartDate,
+                FinishDate = model.FinishDate
+            };
+
+
+
+
+            int sprintCount = project.Sprints.Count();
+            var sprintNo =(sprintCount + 1).ToString();
+            var response = _projectAddSprintService.OnProcess(dto);
+            var sprint = new Sprint(startDate: model.StartDate, finishDate: model.FinishDate, projectId: model.ProjectId,sprintNo: sprintNo);
+
+            return Json("OK");
+        }
+
+
     }
 }

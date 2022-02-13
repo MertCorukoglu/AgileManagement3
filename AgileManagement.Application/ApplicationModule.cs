@@ -1,4 +1,6 @@
 ﻿using AgileManagement.Application;
+using AgileManagement.Application.services.sprint;
+using AgileManagement.Application.validators;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -13,14 +15,17 @@ namespace AgileManagement.Application
         public static void Load(IServiceCollection services)
         {
             services.AddTransient<IUserRegisterValidator, UserRegisterValidator>();
+            services.AddTransient<IAddSprintValidator, AddSprintValidator>();
             // validation, session işlemleri için transient tercih edelim
 
             services.AddScoped<ICookieAuthenticationService, CookieAuthenticationService>();
             services.AddScoped<IUserRegisterService, UserRegisterService>();
             services.AddScoped<IAccountVerifyService, AccountVerifyService>();
             services.AddScoped<IUserLoginService, UserLoginService>();
+            services.AddScoped<IProjectAddSprintService, ProjectAddSprintService>();
 
             services.AddScoped<IProjectWithContributorsRequestService, ProjectWithContributorsRequestService>();
+            services.AddScoped<IProjectWithSprintRequestService, ProjectWithSprintRequestService>();
             services.AddScoped<IContributorProjectAccessApprovementService, ContributorProjectAccessApprovementService>();
         }
     }
