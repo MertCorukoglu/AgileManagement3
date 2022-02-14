@@ -24,7 +24,7 @@ namespace AgileManagement.Application.services.sprint
                 ProjectId = a.Id,
                 Name = a.Name,
                 Description = a.Description,
-                Sprints = a.Sprints.Select(x => new SprintDto
+                Sprints = a.Sprints.OrderByDescending(b=>b.SprintName).Reverse().Select(x => new SprintDto
                 {
                     StartDate = x.StartDate,
                     FinishDate = x.FinishDate,

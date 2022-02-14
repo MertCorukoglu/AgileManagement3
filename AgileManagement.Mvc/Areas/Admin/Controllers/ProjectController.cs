@@ -148,8 +148,10 @@ namespace AgileManagement.Mvc.Areas.Admin.Controllers
                 var project = _projectRepository.GetQuery().Include(c => c.Sprints).Where(x => x.Id == model.ProjectId).FirstOrDefault();
 
                 project.AddSprint(new Sprint(startDate: model.StartDate, finishDate: model.FinishDate));
-
-                return Json(new { isSuccess = true, message = "ok" }); 
+                _projectRepository.Save();
+                var project1 = _projectRepository.GetQuery().Include(c => c.Sprints).Where(x => x.Id == model.ProjectId).FirstOrDefault();
+                var a = project1.Sprints.Last();
+                return Json(new { isSuccess = true, message = "ok" , a});
 
 
             }
@@ -160,8 +162,11 @@ namespace AgileManagement.Mvc.Areas.Admin.Controllers
             }
 
 
-            
-            
+            //var project = _projectRepository.GetQuery().Include(c => c.Sprints).Where(x => x.Id == model.ProjectId).FirstOrDefault();
+            //project.AddSprint(new Sprint(startDate: model.StartDate, finishDate: model.FinishDate));
+            //_projectRepository.Save();
+            //return Json("OK");
+
         }
 
 

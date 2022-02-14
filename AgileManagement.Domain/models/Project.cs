@@ -55,7 +55,7 @@ namespace AgileManagement.Domain
             // Projeye dahil etme isteğinde bulunduk
             // eğer kullanıcı mail adresinden isteği kabul et butonuna basarsa bu durumda projede contributor olarak görünebilecek ve projeye erişm izni olacak.
 
-            if(contributors.Any(x=> x.UserId != contributor.UserId))
+            if(contributors.Any(x=> x.UserId == contributor.UserId))
             {
                 throw new Exception("Aynı user aynı projeye contritor olarak eklenemez");
             }
@@ -82,20 +82,25 @@ namespace AgileManagement.Domain
 
         public void AddSprint(Sprint sprint)
         {
-            var lastSprint = sprints.OrderByDescending(x=>x.FinishDate).First();
-            if ((sprint.StartDate.Day - DateTime.Now.Day) < 0)
+            var a = (sprint.FinishDate - sprint.StartDate).TotalDays;
+            if ((sprint.StartDate - DateTime.Now).TotalDays < -1)
             {
                 throw new Exception("Sprint başlangıç tarihiniz geçmiş tarih olamaz.");
             }
-            if ((lastSprint.FinishDate - sprint.StartDate).TotalMilliseconds > 0)
+            if (sprints.Count() >= 1)
             {
-                throw new Exception("Girdiğiniz sprint tarihi son sprintten büyük olmadılıdır.");
+                var lastSprint = sprints.OrderByDescending(x => x.FinishDate).First();
+                if ((lastSprint.FinishDate - sprint.StartDate).TotalMilliseconds > 0)
+                {
+                    throw new Exception("Girdiğiniz sprint tarihi son sprintten büyük olmadılıdır.");
+                }
             }
+            
             if ((sprint.FinishDate-sprint.StartDate).TotalMilliseconds < 0)
             {
                 throw new Exception("Sprint bitiş tarihi giriş tarihinden büyük olmadılıdır.");
             }
-            if ((sprint.FinishDate- sprint.StartDate).TotalDays < 7 && (sprint.FinishDate - sprint.StartDate).TotalDays > 14)
+            if ((sprint.FinishDate- sprint.StartDate).TotalDays < 7 || (sprint.FinishDate - sprint.StartDate).TotalDays > 14)
             {
                 throw new Exception("Sprint tarihi maksimum 1 hafta olmalıdır.");
             }

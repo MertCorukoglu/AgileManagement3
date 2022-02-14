@@ -5,6 +5,8 @@
 }
 
 @model AgileManagement.Application.dtos.sprint.ProjectWithSprintResponseDto
+    
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <h1>AddSprintRequest</h1>
 
 <div class="container">
@@ -13,6 +15,9 @@
 
         <div class="border col-md-9">
             <button class="btn btn-primary" onclick="AddSprintWindow()">Add Sprint to Project</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Launch demo modal
+            </button>
             <a asp-area="Admin" asp-controller="Project" asp-action="AddContributorRequest">Remove Sprint to Project</a>
             <div class="accordion" id="accordionExample">
                 @foreach (var sprint in Model.Project[0].Sprints)
@@ -26,11 +31,28 @@
                         </h2>
                         <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <p>@sprint.StartDate-@sprint.FinishDate</p>
+                                <p>@sprint.StartDate.ToString("dd-MM-yyyy") / @sprint.FinishDate.ToString("dd-MM-yyyy")</p>
                             </div>
                         </div>
                     </div>
                 }
+            </div>
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ...
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div style="display: none" id="sprintadded" class="row">
                 <div class="col-md-3">
@@ -38,10 +60,11 @@
                 </div>
                 <div class="col-md-6">
                     <p class="text-center">Sprint Details</p>
-                    <input type="date" class="form-control" id="startdate" >
+                    <input type="date" class="form-control" id="startdate">
                     <input type="date" class="form-control" id="finishdate">
                     <button onclick="AddSprint('@Model.Project[0].ProjectId')">Kaydet</button>
                 </div>
+
                 <div class="col-md-3">
 
                 </div>
@@ -55,18 +78,19 @@
 
     <script>
 
+
         function AddSprintWindow(){
 
             $('#sprintadded').toggle();
-            
+
         }
 
         function AddSprint(projectId) {
-            console.log(projectId);
+
             const startDate = $('#startdate').val();
             const finishDate = $('#finishdate').val();
-            console.log(typeof (startDate))
-            console.log(startDate)
+
+
 
             let sprint = {
                 startDate,
@@ -80,18 +104,37 @@
                 data: JSON.stringify(sprint), // data body den gönder demek
                 success: (response) => {
                     if (response.isSuccess) {
-                        alert("Başarılı")
+                        
+                        AddSprintSuccess(response.a)
                     }
                     else {
                         alert(response.message);
                     }
                 },
                 error: (error) => {
-                    
+
                     alert(error);
                 }
             })
-            
+
+        }
+        function AddSprintSuccess(sprint) {
+            console.log(typeof (sprint.finishDate))
+            console.log(sprint)
+
+            let htmlCode = '';
+            $('#accordionExample').append(`<div class="accordion-item">
+                        <h2 class="accordion-header" id="${sprint.sprintName}">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                ${sprint.sprintName}
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <p>${sprint.startDate.slice(0, 10).split("-").reverse().join("-")} / ${sprint.finishDate.slice(0,10).split("-").reverse().join("-")}</p>
+                            </div>
+                        </div>
+                    </div>`);
         }
 
 
