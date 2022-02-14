@@ -98,10 +98,30 @@
 
                 contributors = [contributor, ...contributors];
 
+                //Dropdownmenuden seçilen contributoru gizliyoruz.
+                var option = document.getElementsByTagName("option");
+                for (let i = 0; i < option.length; i++) {
+                    if (option[i].value == userId) {
+                        option[i].style.display = 'none';
+                        option[i].selected = false;
+                        
+                    }
+                }
+                //Dropdownmenude bir sonraki contributoru selected yapıyoruz.
+                for (let i = 0; i < option.length; i++) {
+                    if (option[i].style.display != 'none') {
+                        option[i].selected = true;
+
+                    }
+                }
+                
+
+                
                 $('#contributorTable').append(`
                     <tr id='user_${userId}'>
                         <td>${email}</td>
-                        <td><button class='btn btn-danger' onclick='deleteContributor(${userId})'>Remove</button>
+
+                        <td><button class='btn btn-danger' onclick='deleteContributor(${JSON.stringify(userId)})'>Remove</button>
                         </td>
                     </tr>`);
 
@@ -110,6 +130,26 @@
             }
         }
 
+        function deleteContributor(id) {
+            
+            console.log(`#${id}`);
+            $(`#user_${id}`).remove();
+
+            //Remove edilen contributoru dropdownmenu ye ekliyoruz.
+            var option = document.getElementsByTagName("option");
+            for (let i = 0; i < option.length; i++) {
+                if (option[i].value == id) {
+                    option[i].style.display = 'block';
+                }
+            }
+
+            $.each(contributors, (index, value) => {
+                if (value.userId == id) {
+                    contributors.splice(index, 1);
+                }
+            })
+
+        }
 
         function SendContributorRequest(projectId) {
 
