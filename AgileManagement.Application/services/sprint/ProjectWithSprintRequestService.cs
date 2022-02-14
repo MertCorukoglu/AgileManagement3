@@ -28,7 +28,6 @@ namespace AgileManagement.Application.services.sprint
                 {
                     StartDate = x.StartDate,
                     FinishDate = x.FinishDate,
-                    SprintNo = x.SprintNo,
                     SprintName = x.SprintName
                 }).ToList()
 

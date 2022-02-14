@@ -73,9 +73,6 @@ namespace AgileManagement.Persistence.EF.migrations.projectdb
                     b.Property<string>("SprintName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SprintNo")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgileManagement.Persistence.EF.migrations.appuser
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20220213110830_AppUser")]
+    [Migration("20220214062422_AppUser")]
     partial class AppUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

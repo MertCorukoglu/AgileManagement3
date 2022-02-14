@@ -19,7 +19,7 @@
                 {
 
                     <div class="accordion-item">
-                        <h2 class="accordion-header" id="@sprint.SprintNo">
+                        <h2 class="accordion-header" id="@sprint.SprintName">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                 @sprint.SprintName
                             </button>
@@ -65,6 +65,8 @@
             console.log(projectId);
             const startDate = $('#startdate').val();
             const finishDate = $('#finishdate').val();
+            console.log(typeof (startDate))
+            console.log(startDate)
 
             let sprint = {
                 startDate,
@@ -77,10 +79,16 @@
                 contentType: 'application/json',
                 data: JSON.stringify(sprint), // data body den gönder demek
                 success: (response) => {
-                    alert('Başarılı')
+                    if (response.isSuccess) {
+                        alert("Başarılı")
+                    }
+                    else {
+                        alert(response.message);
+                    }
                 },
                 error: (error) => {
-                    console.log('error', error);
+                    
+                    alert(error);
                 }
             })
             

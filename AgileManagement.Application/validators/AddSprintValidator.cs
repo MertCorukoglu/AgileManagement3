@@ -25,20 +25,20 @@ namespace AgileManagement.Application.validators
 
         public bool IsValid(ProjectAddSprintRequestDto request)
         {
-            var response = _projectWithSprintRequestService.OnProcess(new ProjectWithSprintRequestDto { ProjectId = request.ProjectId });
-            var a = request.FinishDate - request.StartDate;
+            //var response = _projectWithSprintRequestService.OnProcess(new ProjectWithSprintRequestDto { ProjectId = request.ProjectId });
+            //var a = request.FinishDate - request.StartDate;
             
-            if ((request.FinishDate - request.StartDate).TotalMilliseconds < 0)
-            {
-                throw new Exception("Başlangıç tarihi bitiş tarihinden önce olamaz.");
-            }
-            if (response.Project[0].Sprints.Count() >= 1 )
-            {
-                if ((request.StartDate - response.Project[0].Sprints.OrderByDescending(z=>z.SprintNo).First().FinishDate).TotalMilliseconds < 0)
-                {
-                    throw new Exception("Son sprint tarihi girdiğiniz tarihten büyüktür.Lütfen geçerli bir tarih giriniz.");
-                }
-            }
+            //if ((request.FinishDate - request.StartDate).TotalMilliseconds < 0)
+            //{
+            //    throw new Exception("Başlangıç tarihi bitiş tarihinden önce olamaz.");
+            //}
+            //if (response.Project[0].Sprints.Count() >= 1 )
+            //{
+            //    if ((request.StartDate - response.Project[0].Sprints.OrderByDescending(z=>z.SprintNo).First().FinishDate).TotalMilliseconds < 0)
+            //    {
+            //        throw new Exception("Son sprint tarihi girdiğiniz tarihten büyüktür.Lütfen geçerli bir tarih giriniz.");
+            //    }
+            //}
             
             return true;
             

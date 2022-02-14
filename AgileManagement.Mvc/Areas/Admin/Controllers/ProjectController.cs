@@ -9,9 +9,12 @@ using AgileManagement.Mvc.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace AgileManagement.Mvc.Areas.Admin.Controllers
@@ -139,39 +142,26 @@ namespace AgileManagement.Mvc.Areas.Admin.Controllers
         [HttpPost]
         public JsonResult AddSprintRequest ([FromBody] SprintInputModel model)
         {
-            var response = _projectWithSprintRequestService.OnProcess(new ProjectWithSprintRequestDto { ProjectId = model.ProjectId });
 
-            var dto = new ProjectAddSprintRequestDto
+            try
             {
-                FinishDate = model.FinishDate,
-                StartDate = model.StartDate,
-                ProjectId = model.ProjectId
-            };
+                var project = _projectRepository.GetQuery().Include(c => c.Sprints).Where(x => x.Id == model.ProjectId).FirstOrDefault();
 
-            int sprintNo;
+                project.AddSprint(new Sprint(startDate: model.StartDate, finishDate: model.FinishDate));
 
-            if (response.Project[0].Sprints.Count == 0)
-            {
-                sprintNo = 1;
+                return Json(new { isSuccess = true, message = "ok" }); 
+
+
             }
-            else
+            catch (Exception ex)
             {
-                int sprintCount = response.Project[0].Sprints.OrderByDescending(z => z.SprintNo).First().SprintNo;
-                sprintNo = (sprintCount + 1);
+
+                return Json(new { isSuccess = false, message = ex.Message });
             }
+
+
             
-            var response1 = _projectAddSprintService.OnProcess(dto);
-            if (response1)
-            {
-                var sprint = new Sprint(startDate: model.StartDate, finishDate: model.FinishDate, projectId: model.ProjectId, sprintNo: sprintNo);
-                var project = _projectRepository.Find(model.ProjectId);
-                project.AddSprint(new Sprint(model.StartDate, model.FinishDate, model.ProjectId, sprintNo));
-                _projectRepository.Save();
-
-                return Json("OK");
-            }
-            throw new Exception("Kayıt Başarısız");
-            return Json("OK");
+            
         }
 
 

@@ -6,18 +6,19 @@ namespace AgileManagement.Persistence.EF.migrations.projectdb
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "SprintName",
-                table: "Sprint",
-                type: "nvarchar(max)",
-                nullable: true);
+            migrationBuilder.DropColumn(
+                name: "SprintNo",
+                table: "Sprint");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "SprintName",
-                table: "Sprint");
+            migrationBuilder.AddColumn<int>(
+                name: "SprintNo",
+                table: "Sprint",
+                type: "int",
+                nullable: false,
+                defaultValue: 0);
         }
     }
 }

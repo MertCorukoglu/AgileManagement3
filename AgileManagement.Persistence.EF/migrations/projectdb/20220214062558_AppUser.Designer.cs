@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgileManagement.Persistence.EF.migrations.projectdb
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220213144714_AppUser1")]
-    partial class AppUser1
+    [Migration("20220214062558_AppUser")]
+    partial class AppUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -75,8 +75,8 @@ namespace AgileManagement.Persistence.EF.migrations.projectdb
                     b.Property<string>("SprintName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SprintNo")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("SprintNo")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
