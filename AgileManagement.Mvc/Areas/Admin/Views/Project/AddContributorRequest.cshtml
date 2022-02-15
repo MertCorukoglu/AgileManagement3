@@ -97,6 +97,7 @@
             if (!contributors.find(x => x.email == email)) {
 
                 contributors = [contributor, ...contributors];
+                console.log(contributors);
 
                 //Dropdownmenuden seçilen contributoru gizliyoruz.
                 var option = document.getElementsByTagName("option");

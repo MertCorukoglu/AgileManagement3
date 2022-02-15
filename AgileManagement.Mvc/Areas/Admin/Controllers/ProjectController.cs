@@ -140,19 +140,24 @@ namespace AgileManagement.Mvc.Areas.Admin.Controllers
             return View(response);
         }
         [HttpPost]
-        public JsonResult AddSprintRequest ([FromBody] SprintInputModel model)
+        public JsonResult AddSprintRequest([FromBody] SprintInputModel model)
         {
+            //var project = _projectRepository.GetQuery().Include(c => c.Sprints).Where(x => x.Id == model.ProjectId).FirstOrDefault();
 
+            //project.AddSprint(new Sprint(startDate: model.StartDate, finishDate: model.FinishDate));
+            //_projectRepository.Save();
+            //var a = project.Sprints.Last();
+            ////var project1 = _projectRepository.GetQuery().Include(c => c.Sprints).Where(x => x.Id == model.ProjectId).FirstOrDefault();
+            ////var a = project1.Sprints.Last();
+            //return Json(new { isSuccess = true, message = "ok", a });
             try
             {
                 var project = _projectRepository.GetQuery().Include(c => c.Sprints).Where(x => x.Id == model.ProjectId).FirstOrDefault();
 
                 project.AddSprint(new Sprint(startDate: model.StartDate, finishDate: model.FinishDate));
                 _projectRepository.Save();
-                var a = project.Sprints.Last();
-                //var project1 = _projectRepository.GetQuery().Include(c => c.Sprints).Where(x => x.Id == model.ProjectId).FirstOrDefault();
-                //var a = project1.Sprints.Last();
-                return Json(new { isSuccess = true, message = "ok" , a});
+                var a = project.Sprints.Last();               
+                return Json(new { isSuccess = true, message = "ok", a });
 
 
             }
@@ -169,7 +174,22 @@ namespace AgileManagement.Mvc.Areas.Admin.Controllers
             //return Json("OK");
 
         }
+        public JsonResult RemoveSprintRequest([FromBody] List<RemoveSprintInputModel> model)
+        {
+            foreach (var item in model)
+            {
+                var project = _projectRepository.GetQuery().Include(c => c.Sprints).Where(x => x.Id == item.ProjectId).FirstOrDefault();
+                
+                var sprint = project.Sprints.Where(g=>g.SprintName == item.SprintName).FirstOrDefault();
+                sprint.isActive = false;
+                _projectRepository.Update(project);
+                _projectRepository.Save();
+            }
+
+            return Json("OK");
+        }
 
 
-    }
+
+        }
 }

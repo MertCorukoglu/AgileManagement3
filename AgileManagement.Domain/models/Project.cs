@@ -82,6 +82,7 @@ namespace AgileManagement.Domain
 
         public void AddSprint(Sprint sprint)
         {
+            
             var a = (sprint.FinishDate - sprint.StartDate).TotalDays;
             if ((sprint.StartDate - DateTime.Now).TotalDays < -1)
             {
@@ -89,8 +90,9 @@ namespace AgileManagement.Domain
             }
             if (sprints.Count() >= 1)
             {
-                var lastSprint = sprints.OrderByDescending(x => x.FinishDate).First();
-                if ((lastSprint.FinishDate - sprint.StartDate).TotalMilliseconds > 0)
+                var activeLasSprint = sprints.Where(x => x.isActive == true).OrderByDescending(x => x.FinishDate).First(); ;
+                //var lastSprint = sprints.OrderByDescending(x => x.FinishDate).First();
+                if ((activeLasSprint.FinishDate - sprint.StartDate).TotalMilliseconds > 0)
                 {
                     throw new Exception("Girdiğiniz sprint tarihi son sprintten büyük olmadılıdır.");
                 }
@@ -104,7 +106,7 @@ namespace AgileManagement.Domain
             {
                 throw new Exception("Sprint tarihi maksimum 1 hafta olmalıdır.");
             }
-            sprint.SetSprintName(sprints.Count() + 1);
+            sprint.SetSprintName(sprints.Where(x=>x.isActive).Count() + 1);
             sprint.isActive = true;
             sprints.Add(sprint);
         }

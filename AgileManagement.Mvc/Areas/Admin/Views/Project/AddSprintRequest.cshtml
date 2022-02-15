@@ -18,15 +18,18 @@
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                 Add Sprint to Project
             </button>
-            <a asp-area="Admin" asp-controller="Project" asp-action="AddContributorRequest">Remove Sprint to Project</a>
+            <button onclick="RemoveSprint('@Model.Project[0].ProjectId')" type="button" class="btn btn-danger">
+                Remove Sprint to Project
+            </button>
             <div id="accordion">
                 @foreach (var sprint in Model.Project[0].Sprints)
                 {
-                <div class="card">
+                <div class="card" id="card_@sprint.SprintName">
                     <div class="card-header" id="headingOne">
                         <h5 class="mb-0">
+                            <input value="@sprint.SprintName" type="checkbox" class="form-check-input" id="checkbox">
                             <button class="btn btn-link" data-toggle="collapse" data-target="#@sprint.SprintName" aria-expanded="true" aria-controls="collapseOne">
-                                @*<input type="checkbox" class="form-check-input" id="exampleCheck1">*@@sprint.SprintName
+                                @sprint.SprintName
                             </button>
                         </h5>
                     </div>
@@ -71,11 +74,57 @@
 
     <script>
 
+        let removedItems = []
 
         function AddSprintWindow(){
 
             $('#sprintadded').toggle();
 
+        }
+
+
+
+        function RemoveSprint(projectId) {
+            var input = document.getElementsByTagName("input");
+
+            //const removedItem = {
+            //    projectId,
+            //    sprintName
+            //}
+
+            for (let i = 0; i < input.length; i++) {
+                if (input[i].checked == true) {
+                    console.log("Silincek sprint", input[i].value);
+                    let sprintName = input[i].value;
+                    if (!removedItems.find(x => x.sprintName == sprintName)) {
+                        removedItems = [{ projectId, sprintName }, ...removedItems];
+                    }
+                }
+            }
+            console.log("Silincek sprintler", removedItems);
+
+            $.ajax({
+                method: 'Post',
+                url: '/Admin/Project/RemoveSprintRequest',
+                contentType: 'application/json',
+                data: JSON.stringify(removedItems), // data body den gönder demek
+                success: (response) => {
+
+                    AddRemoveSuccess();
+                },
+                error: (error) => {
+
+                    alert(error);
+                }
+            })
+
+        }
+
+        function AddRemoveSuccess() {
+            $.each(removedItems, (index, value) => {
+                console.log(value.sprintName);
+                $(`#card_${value.sprintName}`).remove();
+            })
         }
 
         function AddSprint(projectId) {
@@ -115,9 +164,10 @@
             console.log(typeof (sprint.finishDate))
             console.log(sprint)
 
-            $('#accordion').append(`<div class="card">
+            $('#accordion').append(`<div class="card" id="card_${sprint.sprintName}">
                     <div class="card-header" id="headingOne">
                         <h5 class="mb-0">
+                            <input value="${sprint.sprintName}" type="checkbox" class="form-check-input" id="checkbox">
                             <button class="btn btn-link" data-toggle="collapse" data-target="#${sprint.sprintName}" aria-expanded="true" aria-controls="collapseOne">
                                 ${sprint.sprintName}
                             </button>
@@ -131,7 +181,7 @@
                     </div>
                 </div>`);
         }
-        
+
 
 
     </script>
