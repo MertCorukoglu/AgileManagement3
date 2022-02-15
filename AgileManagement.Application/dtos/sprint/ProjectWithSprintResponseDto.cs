@@ -14,6 +14,7 @@ namespace AgileManagement.Application.dtos.sprint
 
         public DateTime FinishDate { get; set; }
         public string SprintName { get; set; }
+        public bool isActive { get; set; }
 
     }
 

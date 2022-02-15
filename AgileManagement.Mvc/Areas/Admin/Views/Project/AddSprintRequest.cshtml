@@ -14,61 +14,54 @@
         <div class="border col-md-3">@Model.Project[0].Name</div>
 
         <div class="border col-md-9">
-            <button class="btn btn-primary" onclick="AddSprintWindow()">Add Sprint to Project</button>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Launch demo modal
+            
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                Add Sprint to Project
             </button>
             <a asp-area="Admin" asp-controller="Project" asp-action="AddContributorRequest">Remove Sprint to Project</a>
-            <div class="accordion" id="accordionExample">
+            <div id="accordion">
                 @foreach (var sprint in Model.Project[0].Sprints)
                 {
-
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="@sprint.SprintName">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                @sprint.SprintName
+                <div class="card">
+                    <div class="card-header" id="headingOne">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#@sprint.SprintName" aria-expanded="true" aria-controls="collapseOne">
+                                @*<input type="checkbox" class="form-check-input" id="exampleCheck1">*@@sprint.SprintName
                             </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <p>@sprint.StartDate.ToString("dd-MM-yyyy") / @sprint.FinishDate.ToString("dd-MM-yyyy")</p>
-                            </div>
+                        </h5>
+                    </div>
+
+                    <div id="@sprint.SprintName" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body">
+                            @sprint.StartDate.ToString("dd-MM-yyyy") / @sprint.FinishDate.ToString("dd-MM-yyyy")
                         </div>
                     </div>
+                </div>
+                    
                 }
             </div>
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
                         <div class="modal-body">
-                            ...
+                            <p class="text-center">Sprint Details</p>
+                            <input type="date" class="form-control" id="startdate">
+                            <input type="date" class="form-control" id="finishdate">
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button onclick="AddSprint('@Model.Project[0].ProjectId')" type="button" class="btn btn-primary">Save changes</button>
+                            
                         </div>
                     </div>
                 </div>
-            </div>
-            <div style="display: none" id="sprintadded" class="row">
-                <div class="col-md-3">
-
-                </div>
-                <div class="col-md-6">
-                    <p class="text-center">Sprint Details</p>
-                    <input type="date" class="form-control" id="startdate">
-                    <input type="date" class="form-control" id="finishdate">
-                    <button onclick="AddSprint('@Model.Project[0].ProjectId')">Kaydet</button>
-                </div>
-
-                <div class="col-md-3">
-
-                </div>
-            </div>
+            </div>           
         </div>
 
     </div>
@@ -104,7 +97,7 @@
                 data: JSON.stringify(sprint), // data body den gönder demek
                 success: (response) => {
                     if (response.isSuccess) {
-                        
+
                         AddSprintSuccess(response.a)
                     }
                     else {
@@ -122,21 +115,23 @@
             console.log(typeof (sprint.finishDate))
             console.log(sprint)
 
-            let htmlCode = '';
-            $('#accordionExample').append(`<div class="accordion-item">
-                        <h2 class="accordion-header" id="${sprint.sprintName}">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            $('#accordion').append(`<div class="card">
+                    <div class="card-header" id="headingOne">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#${sprint.sprintName}" aria-expanded="true" aria-controls="collapseOne">
                                 ${sprint.sprintName}
                             </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <p>${sprint.startDate.slice(0, 10).split("-").reverse().join("-")} / ${sprint.finishDate.slice(0,10).split("-").reverse().join("-")}</p>
-                            </div>
-                        </div>
-                    </div>`);
-        }
+                        </h5>
+                    </div>
 
+                    <div id="${sprint.sprintName}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body">
+                            <p> ${ sprint.startDate.slice(0, 10).split("-").reverse().join("-")} / ${sprint.finishDate.slice(0, 10).split("-").reverse().join("-")}</p>
+                        </div>
+                    </div>
+                </div>`);
+        }
+        
 
 
     </script>

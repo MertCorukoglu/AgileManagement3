@@ -24,11 +24,12 @@ namespace AgileManagement.Application.services.sprint
                 ProjectId = a.Id,
                 Name = a.Name,
                 Description = a.Description,
-                Sprints = a.Sprints.OrderByDescending(b=>b.SprintName).Reverse().Select(x => new SprintDto
+                Sprints = a.Sprints.Where(n=>n.isActive == true).OrderBy(b=>b.FinishDate).Select(x => new SprintDto
                 {
                     StartDate = x.StartDate,
                     FinishDate = x.FinishDate,
-                    SprintName = x.SprintName
+                    SprintName = x.SprintName,
+                    isActive = x.isActive                                      
                 }).ToList()
 
             }).ToList();

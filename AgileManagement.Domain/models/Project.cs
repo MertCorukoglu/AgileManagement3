@@ -98,13 +98,14 @@ namespace AgileManagement.Domain
             
             if ((sprint.FinishDate-sprint.StartDate).TotalMilliseconds < 0)
             {
-                throw new Exception("Sprint bitiş tarihi giriş tarihinden büyük olmadılıdır.");
+                throw new Exception("Sprint bitiş tarihi giriş tarihinden büyük olmamalıdır.");
             }
             if ((sprint.FinishDate- sprint.StartDate).TotalDays < 7 || (sprint.FinishDate - sprint.StartDate).TotalDays > 14)
             {
                 throw new Exception("Sprint tarihi maksimum 1 hafta olmalıdır.");
             }
             sprint.SetSprintName(sprints.Count() + 1);
+            sprint.isActive = true;
             sprints.Add(sprint);
         }
 

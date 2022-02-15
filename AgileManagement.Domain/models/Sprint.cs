@@ -12,6 +12,7 @@ namespace AgileManagement.Domain.models
         public string SprintName { get;private set; }
         public DateTime StartDate { get;private set; }
         public DateTime FinishDate { get;private set; }
+        public bool isActive { get; set; }
         public Sprint(DateTime startDate, DateTime finishDate)
         {
             Id = Guid.NewGuid().ToString();
