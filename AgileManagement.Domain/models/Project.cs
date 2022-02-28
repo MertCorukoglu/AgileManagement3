@@ -90,7 +90,7 @@ namespace AgileManagement.Domain
             }
             if (sprints.Count() >= 1)
             {
-                var activeLasSprint = sprints.Where(x => x.isActive == true).OrderByDescending(x => x.FinishDate).First(); ;
+                var activeLasSprint = sprints.Where(x => x.isActive == true).OrderByDescending(x => x.FinishDate).First();
                 //var lastSprint = sprints.OrderByDescending(x => x.FinishDate).First();
                 if ((activeLasSprint.FinishDate - sprint.StartDate).TotalMilliseconds > 0)
                 {
@@ -106,7 +106,15 @@ namespace AgileManagement.Domain
             {
                 throw new Exception("Sprint tarihi maksimum 1 hafta olmalıdır.");
             }
-            sprint.SetSprintName(sprints.Where(x=>x.isActive).Count() + 1);
+            if (sprints.Count() >=1)
+            {
+                sprint.SetSprintName(int.Parse(sprints.Where(x => x.isActive == true).OrderByDescending(x => x.FinishDate).First().SprintName.Substring(6)) + 1);
+            }
+            else
+            {
+                sprint.SetSprintName(1);
+            }
+            
             sprint.isActive = true;
             sprints.Add(sprint);
         }

@@ -182,7 +182,7 @@ namespace AgileManagement.Mvc.Areas.Admin.Controllers
                 
                 var sprint = project.Sprints.Where(g=>g.SprintName == item.SprintName).FirstOrDefault();
                 sprint.isActive = false;
-                _projectRepository.Update(project);
+                
                 _projectRepository.Save();
             }
 
